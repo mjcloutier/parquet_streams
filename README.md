@@ -52,7 +52,7 @@ bundle exec rake test
 ```
 
 ### Contributing
-Bug reports and pull requests are welcome on GitHub at https://github.com/your-github-username/parquet_streams.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mjcloutier/parquet_streams.
 
 ### License
 The engine is available as open-source under the terms of the MIT License.
