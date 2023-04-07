@@ -20,5 +20,12 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  spec.add_dependency "rails", ">= 6"
+  spec.add_dependency "activerecord-import"
+  spec.add_dependency "red-arrow"
+  spec.add_dependency "red-parquet"
+  spec.add_dependency "secret_config"
+
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "minitest-rails"
+  spec.add_development_dependency "rails"
 end

@@ -1,23 +1,33 @@
+require "arrow"
+require "parquet"
+
 module ParquetStreams
   class Read
     attr_reader :file_path, :chunk_size
 
-    def initialize(file_path, chunk_size: nil)
-      @file_path = file_path
-      @chunk_size = chunk_size || SecretConfig.fetch("parquet_streams/default_chunk_size")
+    def initialize(file_path, chunk_size: 1_000)
+      @file_path  = file_path
+      @chunk_size = SecretConfig.fetch("parquet_streams/chunk_size") || chunk_size
+
+      begin
+        raise ArgumentError, "File path cannot be nil." if file_path.nil?
+        read_parquet_file(file_path, chunk_size)
+      rescue => e
+        logger.measure_info "parquet_streams.read.error", metric: "parquet_streams/read/error" do
+          Rails.logger.error("ParquetStreams::Read error: #{e.message}")
+        end
+      end
     end
 
-    def read_in_chunks
-      raise ArgumentError, "File path cannot be nil" if file_path.nil?
+    private
 
-      Arrow::Table.load(file_path, batch_size: chunk_size) do |table_chunk|
-        yield table_chunk.to_h.to_a
-      end
-    rescue => e
-      logger.measure_info 'parquet_streams/read_error', metric: 'parquet_streams/read/error' do
-        Rails.logger.error "ParquetStreams::Read: Error reading parquet file: #{e.message}"
-      end
-      raise e
+    def read_parquet_file(file_path, chunk_size)
+      chunk_size ||= SecretConfig.fetch("parquet_streams/chunk_size")
+      Arrow::Table.load(file_path, format: :parquet, batch_size: chunk_size)
+    end
+
+    def logger
+      @logger ||= ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
     end
   end
 end
