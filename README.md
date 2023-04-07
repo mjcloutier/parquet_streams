@@ -40,19 +40,19 @@ class MyModel < ApplicationRecord
   # ...
 end
 
-importer = ParquetConsumer::Parquet::Importer.new("path/to/your/parquet_file.parquet", MyModel)
+importer = ParquetStreams::Import.new("path/to/your/parquet_file.parquet", MyModel)
 importer.import
 ```
 
 ### Running Tests
-To run the tests for the ParquetConsumer engine, navigate to the engine's root directory and execute:
+To run the tests for the ParquetStreams engine, navigate to the engine's root directory and execute:
 
 ```bash
 bundle exec rake test
 ```
 
 ### Contributing
-Bug reports and pull requests are welcome on GitHub at https://github.com/your-github-username/parquet_consumer.
+Bug reports and pull requests are welcome on GitHub at https://github.com/your-github-username/parquet_streams.
 
 ### License
 The engine is available as open-source under the terms of the MIT License.
