@@ -48,7 +48,7 @@ importer.import
 To run the tests for the ParquetStreams engine, navigate to the engine's root directory and execute:
 
 ```bash
-bundle exec rake test
+bin/test
 ```
 
 ### Contributing
